@@ -1,4 +1,7 @@
-package com.datateam;
+package com.datateam.model;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
@@ -7,8 +10,10 @@ public class Customer {
 	@Id
 	public String id;
 
-	public String firstName;
-	public String lastName;
+	private String firstName;
+	private String lastName;
+
+	private List<Transaction> transactions = new ArrayList<Transaction>();
 
 	public Customer() {
 	}
@@ -16,6 +21,11 @@ public class Customer {
 	public Customer(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
+	}
+
+	public void addTransaction(Transaction trans) {
+		this.transactions.add(trans);
+
 	}
 
 	@Override

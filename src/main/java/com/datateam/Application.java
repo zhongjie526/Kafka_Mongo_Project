@@ -5,6 +5,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.datateam.model.Customer;
+import com.datateam.model.Item;
+import com.datateam.model.Transaction;
+
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
@@ -18,9 +22,31 @@ public class Application implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
+		setUp();
+	}
+	
+	private void setUp() {
 		repository.deleteAll();
+		
+		Customer maruthi = new Customer("Maruthi", "Gerard");
+		Transaction trans1 = new Transaction();
+		try {
+			
+			Thread.sleep(2000);
+			
+		}catch(InterruptedException e) {}
+		Transaction trans2 = new Transaction();
+		Item item1 = new Item("Mac",4000D);
+		Item item2 = new Item("Things he don't need",20000D);
+		Item item3 = new Item("Drone",500D);
+		trans1.addItem(item1);
+		trans1.addItem(item2);
+		trans2.addItem(item3);
+		maruthi.addTransaction(trans1);
+		maruthi.addTransaction(trans2);
 
-		repository.save(new Customer("Maruthi", "Gerard"));
+		repository.save(maruthi);
+		
 		repository.save(new Customer("Marcel", "Gerard"));
 
 		System.out.println("Customers found with findAll():");
@@ -39,7 +65,6 @@ public class Application implements CommandLineRunner {
 		for (Customer customer : repository.findByLastName("Gerard")) {
 			System.out.println(customer);
 		}
-
 	}
 
 }
