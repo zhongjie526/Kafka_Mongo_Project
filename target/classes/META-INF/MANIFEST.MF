@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: datateam-streaming
+Implementation-Version: 0.1.0
+Built-By: frank
+Implementation-Vendor-Id: com.datateam
+Build-Jdk: 1.8.0_181
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/datateam-streaming
+Created-By: Maven Integration for Eclipse
+
