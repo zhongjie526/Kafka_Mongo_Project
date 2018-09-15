@@ -22,6 +22,10 @@ public class Customer {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
+	
+	public List<Transaction>getTransactions() {
+		return transactions;
+	}
 
 	public void addTransaction(Transaction trans) {
 		this.transactions.add(trans);
