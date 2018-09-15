@@ -1,12 +1,16 @@
 package com.datateam;
 
 import java.util.Properties;
+import java.util.function.Consumer;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -46,7 +50,7 @@ public class Application implements CommandLineRunner {
 		}
 		Transaction trans2 = new Transaction();
 		Item item1 = new Item("Mac", 4000D);
-		Item item2 = new Item("Things he don't need", 20000D);
+		Item item2 = new Item("Book", 200D);
 		Item item3 = new Item("Drone", 500D);
 		trans1.addItem(item1);
 		trans1.addItem(item2);
@@ -60,7 +64,7 @@ public class Application implements CommandLineRunner {
 
 	}
 
-	public void checkingData() {
+	public void checkingData() throws Exception {
 		System.out.println("Customers found with findAll():");
 		System.out.println("-------------------------------");
 		for (Customer customer : repository.findAll()) {
@@ -70,13 +74,50 @@ public class Application implements CommandLineRunner {
 
 		System.out.println("Customer found with findByFirstName('Maruthi'):");
 		System.out.println("--------------------------------");
-		System.out.println(repository.findByFirstName("Maruthi"));
+		Customer maruthi = repository.findByFirstName("Maruthi");
+		System.out.println(maruthi);
+		
+		for(Transaction trans: repository.findByFirstName("Maruthi").getTransactions()) {
+			System.out.println(trans);
+		}
 
 		System.out.println("Customers found with findByLastName('Gerard'):");
 		System.out.println("--------------------------------");
 		for (Customer customer : repository.findByLastName("Gerard")) {
 			System.out.println(customer);
 		}
+		
+		JSONObject obj = new JSONObject("{\"name\":\"Maruthi Gerard\",\"order\":[{\"description\":\"Mac\",\"price\":4000.0D},{\"description\":\"Book\",\"price\":200.0D}]}");
+	 
+		JSONArray array = (JSONArray)obj.getJSONArray("order");
+		System.out.println("============================");
+		
+		//System.out.println(array);
+		Transaction trans = new Transaction();
+		
+		array.forEach(o->  {
+			JSONObject order = (JSONObject)o;
+			String desc = ((JSONObject)o).getString("description");
+			Double price = ((JSONObject)o).getDouble("price");
+			Item i = new Item(desc,price);
+			trans.addItem(i);
+		});
+		
+		System.out.println(trans);
+		
+		
+		maruthi.getTransactions().forEach(t->{
+			System.out.println(trans.equivalent(t));
+			System.out.println(t.getItems());
+			System.out.println(trans.getItems());
+			
+		});
+		;
+		
+		
+
+			 
+		 
 	}
 
 	public void kafkaSetUp() {

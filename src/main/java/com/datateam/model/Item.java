@@ -15,5 +15,10 @@ public class Item {
 		this.description = description;
 		this.price = price;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("{description='%s', price='%s'}", description, price);
+	}
 
 }
