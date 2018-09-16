@@ -13,7 +13,7 @@ public class Transaction {
 	private String ts;
 
 	public Transaction() {
-		this.items = new HashSet<>();
+		this.items = new HashSet<Item>();
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		ts = sdf.format(timestamp);
 	}
@@ -27,10 +27,31 @@ public class Transaction {
 		return items;
 	}
 
-	public Boolean equivalent(Transaction that) {
-		return this.items.containsAll(that.items) && that.items.containsAll(this.items) ;
+	@Override
+	public boolean equals(Object o) {
+		
+		if (o == this) { 
+            return true; 
+        } 
+  
+        if (!(o instanceof Transaction)) { 
+            return false; 
+        } 
+          
+        Transaction c = (Transaction) o;
+        
+        if(c.items.size() != items.size()) {
+        	return false;
+        }
+        
+		return  this.getItems().containsAll(c.getItems());
 		
 	}
+	
+	@Override
+    public int hashCode(){
+            return items.hashCode();
+    }
 	
 	@Override
 	public String toString() {

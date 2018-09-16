@@ -20,5 +20,27 @@ public class Item {
 	public String toString() {
 		return String.format("{description='%s', price='%s'}", description, price);
 	}
+	
+	@Override
+    public boolean equals(Object o) { 
+  
+        if (o == this) { 
+            return true; 
+        } 
+  
+        if (!(o instanceof Item)) { 
+            return false; 
+        } 
+          
+        Item c = (Item) o; 
+          
+        return (description.equalsIgnoreCase(c.description) && (price - c.price)<0.01); 
+    } 
+	
+	@Override
+    public int hashCode(){
+            return description.hashCode() + price.hashCode();
+    }
+
 
 }

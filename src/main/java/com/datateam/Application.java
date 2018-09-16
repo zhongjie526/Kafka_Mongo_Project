@@ -1,7 +1,7 @@
 package com.datateam;
 
 import java.util.Properties;
-import java.util.function.Consumer;
+import java.util.Set;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
@@ -9,7 +9,6 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -34,7 +33,7 @@ public class Application implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		mongoSetUp();
 		checkingData();
-		kafkaSetUp();
+		//kafkaSetUp();
 	}
 
 	private void mongoSetUp() {
@@ -97,22 +96,19 @@ public class Application implements CommandLineRunner {
 		
 		array.forEach(o->  {
 			JSONObject order = (JSONObject)o;
-			String desc = ((JSONObject)o).getString("description");
-			Double price = ((JSONObject)o).getDouble("price");
+			String desc = order.getString("description");
+			Double price = order.getDouble("price");
 			Item i = new Item(desc,price);
 			trans.addItem(i);
 		});
+
+		if (maruthi.getTransactions().contains(trans)) {
+			System.out.println("Duplicate Order Identified!");
+		}
+
 		
-		System.out.println(trans);
 		
 		
-		maruthi.getTransactions().forEach(t->{
-			System.out.println(trans.equivalent(t));
-			System.out.println(t.getItems());
-			System.out.println(trans.getItems());
-			
-		});
-		;
 		
 		
 
